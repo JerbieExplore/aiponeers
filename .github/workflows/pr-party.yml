@@ -1,0 +1,52 @@
+name: PR Party
+on:
+  pull_request:
+    types: [opened, reopened, edited, synchronize]
+
+permissions:
+  contents: write
+
+jobs:
+  party:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Ensure data file exists
+        run: |
+          mkdir -p data
+          if [ ! -f data/prs.json ]; then echo "[]" > data/prs.json; fi
+
+      - name: Moo the title (cowsay 🐮)
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y cowsay >/dev/null
+          title="${{ github.event.pull_request.title }}"
+          echo
+          echo "COWSAY SAYS:"
+          cowsay "$title"
+          echo
+
+      - name: Append PR to data/prs.json
+        id: append
+        run: |
+          pr_number=${{ github.event.pull_request.number }}
+          pr_title=$(printf '%s' "${{ github.event.pull_request.title }}" | python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))')
+          pr_author=${{ github.event.pull_request.user.login }}
+          pr_url=${{ github.event.pull_request.html_url }}
+
+          node - <<'NODE'
+          const fs = require('fs');
+          const path = 'data/prs.json';
+          const data = JSON.parse(fs.readFileSync(path,'utf8'));
+          const pr = {
+            number: Number(process.env.PR_NUMBER),
+            title: JSON.parse(process.env.PR_TITLE),
+            author: process.env.PR_AUTHOR,
+            url: process.env.PR_URL,
+            ts: new Date().toISOString()
+          };
+         
