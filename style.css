@@ -1,3 +1,20 @@
+/* Auto-detect system theme */
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg:#f9fafb; --card:#ffffff; --text:#0f172a; --muted:#475569;
+  }
+}
+
+/* Card flip effect */
+.card {
+  perspective: 1000px;
+  transform-style: preserve-3d;
+  transition: transform 0.6s;
+}
+.card:hover {
+  transform: rotateY(180deg);
+}
+----
 function render(prs) {
   const cards = $('#cards');
   cards.innerHTML = '';
