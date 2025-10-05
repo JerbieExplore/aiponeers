@@ -89,3 +89,19 @@ function ping() {
 }
 
 loadPRs();
+
+filtered.slice().reverse().forEach(p => {
+  const e = document.createElement('div');
+  e.className = 'card';
+  const emoji = EMOJIS[Math.floor(Math.random()*EMOJIS.length)];
+  const status = "🟢 Offen"; // Dummy Status, könnte später dynamisch werden
+  e.innerHTML = `
+    <div class="emoji">${emoji}</div>
+    <div class="title">${escapeHtml(p.title)}</div>
+    <div class="meta">by ${escapeHtml(p.author)} • #${p.number} • ${formatRelative(p.ts)}</div>
+    <span class="badge status">${status}</span>
+    <a href="${p.url}" target="_blank" rel="noopener">Open PR ↗</a>
+  `;
+  cards.appendChild(e);
+});
+
