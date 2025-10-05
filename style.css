@@ -1,3 +1,41 @@
+function render(prs) {
+  const cards = $('#cards');
+  cards.innerHTML = '';
+
+  const filtered = prs.filter(p => {
+    if (!FILTER) return true;
+    const hay = `${p.title||''} ${p.author||''}`.toLowerCase();
+    return hay.includes(FILTER);
+  });
+
+  $('#counter').textContent = `${filtered.length} Ergebnisse`;
+
+  filtered.slice().reverse().forEach(p => {
+    const e = document.createElement('div');
+    e.className = 'card';
+    e.innerHTML = `
+      <div class="emoji">🚀</div>
+      <div class="title">${escapeHtml(p.title)}</div>
+      <div class="meta">by ${escapeHtml(p.author)} • #${p.number}</div>
+      <a href="${p.url}" target="_blank" rel="noopener">Open PR ↗</a>
+    `;
+    e.addEventListener('click', () => openModal(p));
+    cards.appendChild(e);
+  });
+}
+
+// Modal Logic
+function openModal(pr) {
+  $('#modalTitle').textContent = pr.title;
+  $('#modalMeta').textContent = `Author: ${pr.author} • #${pr.number} • ${formatRelative(pr.ts)}`;
+  $('#modalLink').href = pr.url;
+  $('#modalJson').textContent = JSON.stringify(pr, null, 2);
+
+  $('#prModal').classList.remove('hidden');
+}
+$('#closeModal').addEventListener('click', () => {
+  $('#prModal').classList.add('hidden');
+});
 :root { --bg:#0f1226; --card:#171a36; --text:#e7e9ff; --muted:#9aa0ff; }
 * { box-sizing: border-box; }
 body { margin:0; font-family: ui-sans-serif, system-ui, Segoe UI, Roboto, Helvetica, Arial;
