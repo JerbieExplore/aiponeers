@@ -1,3 +1,42 @@
+<!doctype html>
+<html lang="de" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>PR Party 🎉</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>PR Party 🎉</h1>
+    <p>Jede Pull Request wirft Konfetti & bekommt eine Karte hier unten.</p>
+
+    <div class="controls">
+      <div class="control search">
+        <input id="searchInput" type="search" placeholder="Suche nach Titel oder Autor …" />
+      </div>
+      <div class="control toggle">
+        <button id="themeToggle" title="Theme wechseln">🌙 Dark</button>
+      </div>
+      <div class="control info">
+        <span id="counter">0 Ergebnisse</span>
+      </div>
+    </div>
+
+    <div id="leaderboard"></div>
+  </header>
+
+  <main id="cards"></main>
+
+  <canvas id="confetti"></canvas>
+
+  <footer>
+    <small>Powered by GitHub Actions + Pages • Auto-Refresh: <span id="refreshInfo">aus</span></small>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
 
 ---
 
